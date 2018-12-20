@@ -6,7 +6,7 @@
 #    By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/18 11:15:08 by akupriia          #+#    #+#              #
-#    Updated: 2018/12/19 22:08:08 by akupriia         ###   ########.fr        #
+#    Updated: 2018/12/20 21:58:35 by akupriia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ LIB_HDR	:=	$(LIB)hdr/
 SRC_D	:=	src/
 OBJ_D	:=	.obj/
 
-CFLAGS	:=	-Wall -Wextra -Werror -g
+# -Wall -Wextra -Werror
+CFLAGS	:=	 -g
 IFLAGS	:=	-I $(LIB_HDR) -I ./
 LFLAGS	:=	-lftprintf -L $(LIB)
 CC		:=	clang
