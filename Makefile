@@ -6,7 +6,7 @@
 #    By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/18 11:15:08 by akupriia          #+#    #+#              #
-#    Updated: 2018/12/20 21:58:35 by akupriia         ###   ########.fr        #
+#    Updated: 2019/01/14 22:43:49 by akupriia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ IFLAGS	:=	-I $(LIB_HDR) -I ./
 LFLAGS	:=	-lftprintf -L $(LIB)
 CC		:=	clang
 
-SRC		:=	md5_algo main utils
+SRC		:=	md5_algo sha256_algo sha224_algo sha512_algo sha384_algo main utils
 SRCS	:=	$(addprefix $(SRC_D), $(addsuffix .c, $(SRC)))
 OBJ		:=	$(addprefix $(OBJ_D), $(SRCS:%.c=%.o))
 

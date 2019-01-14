@@ -6,12 +6,11 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:10:23 by akupriia          #+#    #+#             */
-/*   Updated: 2018/12/20 22:27:37 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/14 23:06:18 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ssl.h"
-#include <stdio.h>
 
 #define A 					0
 #define B 					1
@@ -21,9 +20,7 @@
 #define G(B, C, D) 			((B) & (D)) | ((C) & ~(D))
 #define H(B, C, D) 			(B) ^ (C) ^ (D)
 #define I(B, C, D) 			(C) ^ (B | ~(D))
-#define CHUNK_S_BYTES		64
-#define MD5_STEPS_N			64
-#define CHUNK_S_BITS		512
+
 #define UINT32_BIT			(sizeof(uint32_t) * 8)
 #define ROTATE_LEFT(x, n)	(((x) << (n)) | ((x) >> (32-(n))))
 
@@ -80,31 +77,31 @@ static void				md5_r_algo(uint32_t	*bufs, uint32_t *chunk)
 		else if (i < 64 && (f = I(bufs[B], bufs[C], bufs[D])))
 			g = (i * 7) % 16;
 		tmpf = f;
-		printf("f=%x g=%d w[g]=%x\n", f, g, chunk[g]);
+		// printf("f=%x g=%d w[g]=%x\n", f, g, chunk[g]);
 		f += bufs[A] + g_val[i] + chunk[g];
 		tmp = bufs[A];
 		bufs[A] = bufs[D];
 		bufs[D] = bufs[C];
 		bufs[C] = bufs[B];
-		printf("rotateLeft(%x + %x + %x + %x, %d)\n", tmp, tmpf, g_val[i], chunk[g], g_shift_num[i]);
+		// printf("rotateLeft(%x + %x + %x + %x, %d)\n", tmp, tmpf, g_val[i], chunk[g], g_shift_num[i]);
 		bufs[B] += ROTATE_LEFT(f, g_shift_num[i]);
 	}
 }
 
-static void		exec_md5_cycle(t_md5 *md5, uint8_t *word)
+static void		exec_md5_cycle(t_md5sha *md5, uint8_t *word)
 {
 	// uint8_t		extra_steps;
-	int			i;
-	int			j;
 	int			chunk_num;
 	uint32_t	buffers[4];
+	int			i;
+	int			j;
 
 	i = -1;
-	chunk_num = md5->len_bits / CHUNK_S_BITS + 1;
+	chunk_num = md5->len_bits / g_chunk_sbit + 1;
 	while (++i < chunk_num && (j = -1))
 	{
 		ft_memcpy(buffers, md5->buffers, sizeof(buffers));
-		md5_r_algo(buffers, (uint32_t*)(void*)(word + i * CHUNK_S_BYTES));
+		md5_r_algo(buffers, (uint32_t*)(void*)(word + i * g_chunk_sbyte));
 		while (++j < 4)
 			md5->buffers[j] += buffers[j];
 	}
@@ -119,46 +116,24 @@ static void		exec_md5_cycle(t_md5 *md5, uint8_t *word)
 	// }
 }
 
-static int		append_pad_bits(int fsize, int slen, uint8_t *buffer)
-{
-	size_t		size;
-	// uint32_t	bits_len;
-
-	fsize += slen;
-	// size = (slen / CHUNK_S_BYTES + 1) * CHUNK_S_BYTES;
-	// (size - slen <= 8) ? size += CHUNK_S_BYTES : 1;
-	// buffer[slen] = 0x80;
-	// bits_len = fsize << 3;
-	// ft_bzero(buffer + slen + 1, size - slen - 8 - 1);
-	// // *(uint64_t*)(buffer + size - 8) = fsize << 3;
-	// ft_memcpy(buffer + size, &bits_len, 4);
-    for(size = slen*8 + 1; size%512!=448; size++);
-    size /= 8;
-    // buffer = ft_memalloc(size + 64, 1); // also appends "0" bits 
-                                   // (we alloc also 64 extra bytes...)
-    buffer[slen] = 128; // write the "1" bit
-    uint32_t bits_len = 8*slen; // note, we append the len
-    memcpy(buffer + size, &bits_len, 4);
-    printf("size: %d, bits_len: %d, slen: %d\n", size, bits_len, slen);
-	return (size);
-}
-
-// static void		append_pad_bits(t_md5 *md5, const char *word)
+// static void		append_pad_bits(t_md5sha *md5, const char *word)
 // {
 // 	ft_memcpy(md5->ablock, word, sizeof(word));
 // 	md5->ablock[md5->len_bits] = 1;
 // }
 
-uint32_t		*md5_word(const char *word, t_md5 *md5)
+uint32_t		*md5_word(const char *word, t_md5sha *md5)
 {
 	// uint32_t		buffers[4];
 	uint8_t			*message;
 	uint32_t		*digest;
 	// size_t			res_len;
-	int len = ft_strlen(word);
-	message = ft_memalloc((len + CHUNK_S_BYTES) * sizeof(char));
+	int				len;
+	
+	len = ft_strlen(word);
+	message = ft_memalloc((len + g_chunk_sbyte) * sizeof(char));
 	ft_strcpy((char *)message, word);
-	md5->len_bytes = append_pad_bits(0, len, message);
+	md5->len_bytes = append_pad_bits_md5(0, len, message);
 	md5->len_bits = md5->len_bytes * CHAR_BIT;
 	// message = ft_strdup(word);
 	// append_pad_bits(md5, word);
@@ -169,46 +144,13 @@ uint32_t		*md5_word(const char *word, t_md5 *md5)
 	return (digest);
 }
 
-static uint32_t	swap_int32(const uint32_t value)
-{
-	uint32_t result = 0;
-	result |= (value & 0x000000FF) << 24;
-	result |= (value & 0x0000FF00) << 8;
-	result |= (value & 0x00FF0000) >> 8;
-	result |= (value & 0xFF000000) >> 24;
-	return result;
-}
-
-static void		print_digest(uint32_t *digest)
-{
-	uint32_t	i;
-	uint32_t	tmp;
-
-	i = -1;
-	while (++i < g_ssl->info.size / 4)
-	{
-		tmp = digest[i];
-		(g_ssl->info.swap_endian) ? tmp = swap_int32(tmp) : 1;
-		ft_printf("%8.8x", tmp);
-	}
-	ft_putchar('\n');
-}
-
-uint32_t	*hash_file_content(const char *word, t_hashalgo func)
-{
-	uint32_t	*res;
-
-	res = NULL;
-	(void)word;
-	(void)func;
-	return (res);
-}
 
 bool			get_md5_hash(const char *word)
 {
-	t_md5		md5;
+	t_md5sha	md5;
 	uint32_t	*res;
 
+	(!word) ? (puterr(2, USAGE)) : (void)1;
 	ft_bzero((void *)&md5, sizeof(md5));
 	g_ssl->info.size = 16;
 	g_ssl->info.swap_endian = 1;
@@ -218,11 +160,11 @@ bool			get_md5_hash(const char *word)
 	md5.buffers[D] = 0x10325476;
 	if (!(g_ssl->info.fl & FL_S))
 	{
-		if (!(res = hash_file_content(word, md5_word)))
+		if (!(res = hash_file_content32(word, md5_word, &md5)))
 			return (true);
 	}
 	else if (!(res = md5_word(word, &md5)))
 		return (true);
-	print_digest(res);
+	print_hash32("MD5", res, word);
 	return (false);
 }

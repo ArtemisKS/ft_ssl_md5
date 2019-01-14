@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:42:47 by akupriia          #+#    #+#             */
-/*   Updated: 2018/12/19 22:14:40 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/14 23:19:07 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,19 @@
 # define GREEN				"\033[0;32m"
 # define PURPLE				"\033[0;35m"
 # define RED				"\033[0;31m"
-# define INVALID_OPTION		"Error: invalid option: %s\n"
-# define USAGE				"usage: ft_ssl [-pqr] [-s string] [files ...]"
+# define INVALID_OPTION		"ft_ssl: Error: '%s' is an invalid command:\n"
+# define USAGE				"usage: ft_ssl [md5] [-pqr] [-s string] [files ...]"
 # define BUF				4096
+// # define CHUNK_S_BYTES		64
+// # define CHUNK_S_BYTES_512	128
+# define MD5_STEPS_N		64
+// # define CHUNK_S_BITS		512
+// # define CHUNK_S_BITS_512	1024
 
 typedef bool				(*t_funcs)(int, char **);
 typedef bool				(*t_algo)(const char *);
+size_t						g_chunk_sbyte;
+size_t						g_chunk_sbit;
 
 enum FLAGS
 {
@@ -70,24 +77,43 @@ typedef struct				s_ssl
 
 t_ssl						*g_ssl;
 
-typedef struct				s_md5
+typedef struct				s_md5sha
 {
 	// uint32_t				words[16];
-	uint32_t				buffers[4];
+	uint32_t				buffers[8];
 	uint32_t				len_bits;
 	uint32_t				len_bytes;
-	uint8_t					ablock[128];
-}							t_md5;
+}							t_md5sha;
 
-typedef uint32_t*			(*t_hashalgo)(const char *, t_md5 *);
+typedef struct				s_sha512
+{
+	// uint32_t				words[16];
+	uint64_t				buffers[8];
+	uint64_t				len_bits;
+	uint64_t				len_bytes;
+}							t_sha512;
+
+typedef uint32_t*			(*t_hash32)(const char *, t_md5sha *);
+typedef uint64_t*			(*t_hash64)(const char *, t_sha512 *);
 
 void						puterr(int type, const char *strerr, ...);
 bool						read_stin(int fd, char **line);
 bool						process(int ac, char **av);
-void						parse_options(char **av);
+int							parse_options(char **av);
 bool						get_md5_hash(const char *word);
-
-
+uint32_t					swap_int32(const uint32_t value);
+uint64_t					swap_int64(const uint64_t value);
+int							append_pad_bits_sha(int fsize, int slen, uint32_t *buf);
+int							append_pad_bits_sha512(int fsize, int slen, uint64_t *buf);
+int							append_pad_bits_md5(int fsize, int slen, uint8_t *buf);
+uint32_t					*hash_file_content32(const char *word, t_hash32 func, t_md5sha *shamd);
+uint64_t					*hash_file_content64(const char *word, t_hash64 func, t_sha512 *sha);
 bool						get_sha256_hash(const char *word);
+void						print_hash32(char const *alg, uint32_t *digest, char const *word);
+void						print_hash64(char const *alg, uint64_t *digest, char const *word);
+bool						get_sha224_hash(const char *word);
+bool						get_sha256_hash(const char *word);
+bool						get_sha512_hash(const char *word);
+bool						get_sha384_hash(const char *word);
 
 #endif
