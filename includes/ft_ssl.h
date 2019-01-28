@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:42:47 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/14 23:19:07 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/28 20:55:32 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ typedef struct				s_sha512
 	uint64_t				buffers[8];
 	uint64_t				len_bits;
 	uint64_t				len_bytes;
+	uint					numBlocks;
 }							t_sha512;
 
 typedef uint32_t*			(*t_hash32)(const char *, t_md5sha *);

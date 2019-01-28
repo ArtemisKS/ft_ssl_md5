@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/14 21:06:47 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/15 00:06:14 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/28 22:49:01 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static void	sha512_r_algo(uint64_t *buff, uint64_t *tmp_words)
 
 static void	init_tmp_words(uint64_t *w, uint64_t *block)
 {
-	uint64_t	i;
+	int			i;
 	uint64_t	tmp_1;
 	uint64_t	tmp_2;
 
@@ -121,26 +121,27 @@ static void	init_tmp_words(uint64_t *w, uint64_t *block)
 ** `I hate you norm`
 */
 
-static void	exec_sha512_cycle(t_sha512 *sha512, uint64_t *word)
+static void	exec_sha512_cycle(t_sha512 *sha512, unsigned char *word)
 {
 	int				chunk_num;
 	uint64_t		buffers[8];
-	static uint64_t	tmp_words[64];
+	static uint64_t	tmp_words[80];
 	int				i;
 	int				j;
 
 	i = -1;
-	chunk_num = sha512->len_bits / g_chunk_sbit;
-	ft_bzero(tmp_words, 64 * sizeof(uint64_t));
+	chunk_num = sha512->len_bytes / g_chunk_sbyte;
+	ft_printf("----------------------------->\nOur chunk: %d\n----------------------------->\n", chunk_num);
+	ft_bzero(tmp_words, 80 * sizeof(uint64_t));
 	// ft_printf("chunk_num: %d, sha512->len_bits: %d\n", chunk_num,  sha512->len_bits);
 	// ft_printf("\t\t a \t\t b \t\t c \t\t d \t\t e \t\t f \t\t g \t\t h \n");
 	while (++i < chunk_num && (j = -1))
 	{
 		ft_memcpy(buffers, sha512->buffers, sizeof(buffers));
-		init_tmp_words(tmp_words, word + i * 16);
+		init_tmp_words(tmp_words, (uint64_t *)(word + i * g_chunk_sbyte));
 		ft_printf("Padded_block:\n");
-		for (int k = 0; k < 32; k++)
-			ft_printf("%x", (word + i * 16)[k]);
+		for (int k = 0; k < sha512->len_bytes; k++)
+			ft_printf("%x", (word + i * g_chunk_sbyte)[k]);
 		ft_putchar('\n');
 		sha512_r_algo(buffers, tmp_words);
 		while (++j < 8)
@@ -148,12 +149,31 @@ static void	exec_sha512_cycle(t_sha512 *sha512, uint64_t *word)
 	}
 }
 
+size_t			num_bytes(const char *str, int algo)
+{
+	size_t			len;
+
+	len = ft_strlen(str) + 9;
+	if (algo == 256)
+	{
+		while (len * 8 % 512 != 0)
+			len++;
+	}
+	else if (algo == 512)
+	{
+		len += 8;
+		while (len * 8 % 1024 != 0)
+			len++;
+	}
+	return (len);
+}
+
 uint64_t	*sha512_word(const char *word, t_sha512 *sha512)
 {
 	// static uint8_t	last_block[128];
-	void			*message;
+	unsigned char	*message;
 	uint64_t		*digest;
-	size_t			len;
+	uint64_t		len;
 
 	sha512->buffers[A] = 0x6a09e667f3bcc908;
 	sha512->buffers[B] = 0xbb67ae8584caa73b;
@@ -163,11 +183,22 @@ uint64_t	*sha512_word(const char *word, t_sha512 *sha512)
 	sha512->buffers[F] = 0x9b05688c2b3e6c1f;
 	sha512->buffers[G] = 0x1f83d9abfb41bd6b;
 	sha512->buffers[H] = 0x5be0cd19137e2179;
-	len = ft_strlen(word);
-	message = ft_memalloc((len + g_chunk_sbyte) * sizeof(char));
-	ft_memcpy((uint64_t *)message, word, len);
+	len = (uint64_t)ft_strlen(word);
+	// sha512->numBlocks = 1 + ((inp_bitlen + 16 + g_chunk_sbyte) / g_chunk_sbit);
+	sha512->len_bytes = num_bytes(word, 512);
+	message = (unsigned char *)malloc(sha512->len_bytes);
+	ft_bzero(message, sha512->len_bytes);
+	// message = ft_memalloc((sha512->len_bytes) * sizeof(char));
+	ft_memcpy(message, word, len);
+
+	ft_printf("\n");
 	ft_printf("word: %s\n", word);
-	sha512->len_bytes = append_pad_bits_sha512(0, len, message);
+	ft_printf("message: %s, sizeof(message): %d, sha.str_bits: %d, sha.byte_len: %d\n",
+	message, sizeof(message), len, sha512->len_bytes);
+	sha512->len_bytes = append_pad_bits_sha512(0, len, (uint64_t *)message);
+	for (int k = 0; k < sha512->len_bytes; k++)
+		ft_printf("%x", (message)[k]);
+	ft_printf("\n");
 	ft_printf("sha512->len_bytes: %llu\n", sha512->len_bytes);
 	sha512->len_bits = sha512->len_bytes * CHAR_BIT;
 	exec_sha512_cycle(sha512, message);
@@ -177,6 +208,35 @@ uint64_t	*sha512_word(const char *word, t_sha512 *sha512)
 	return (digest);
 }
 
+static bool		print_dig64(uint64_t *digest)
+{
+	int			i;
+	uint64_t	tmp;
+
+	i = -1;
+	while (++i < g_ssl->info.size / 4)
+	{
+		tmp = digest[i];
+		// (g_ssl->info.swap_endian) ? tmp = swap_int64(tmp) : 1;
+		ft_printf("%lx", tmp);
+	}
+	return (true);
+}
+
+static bool		print_dig32(uint32_t *digest)
+{
+	int			i;
+	uint32_t	tmp;
+
+	i = -1;
+	while (++i < g_ssl->info.size / 4)
+	{
+		tmp = digest[i];
+		// (g_ssl->info.swap_endian) ? tmp = swap_int32(tmp) : 1;
+		ft_printf("%x", tmp);
+	}
+	return (true);
+}
 
 bool			get_sha512_hash(const char *word)
 {
@@ -185,7 +245,7 @@ bool			get_sha512_hash(const char *word)
 	int			i;
 
 	(!word) ? (puterr(2, USAGE)) : (void)1;
-	ft_bzero((void *)&sha512, sizeof(sha512));
+	ft_bzero((void *)&sha512, sizeof(t_sha512 *));
 	g_ssl->info.size = 32;
 	g_ssl->info.swap_endian = 1;
 	if (!(g_ssl->info.fl & FL_S))
@@ -195,9 +255,14 @@ bool			get_sha512_hash(const char *word)
 	}
 	else
 		res = sha512_word(word, &sha512);
-	if (/*ft_get_endianness() && */(i = -1))
-		while (++i < (g_ssl->info.size / 4))
-			res[i] = swap_int64(res[i]);
-	print_hash64("SHA512", res, word);
+	// if (/*ft_get_endianness() && */(i = -1))
+	// 	while (++i < (g_ssl->info.size / 4))
+	// 		res[i] = swap_int64(res[i]);
+	// ft_printh_sha512(&sha512);
+	// print_dig64(res);
+	print_dig64(res);
+	// ft_printf("%llx%lx%lx%lx%lx%lx%lx%lx", sha512.buffers[A], sha512.buffers[B], sha512.buffers[C],
+	// 			sha512.buffers[D], sha512.buffers[E], sha512.buffers[F], sha512.buffers[G], sha512.buffers[H]);	
+	// print_hash64("SHA512", res, word);
 	return (false);
 }

@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/12 18:50:06 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/14 23:06:18 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/28 10:25:55 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static void	sha256_r_algo(uint32_t *buff, uint32_t *tmp_words)
 
 static void	init_tmp_words(uint32_t *w, uint32_t *block)
 {
-	uint64_t	i;
+	int			i;
 	uint32_t	tmp_1;
 	uint32_t	tmp_2;
 
@@ -180,7 +180,7 @@ bool			get_sha256_hash(const char *word)
 	(!word) ? (puterr(2, USAGE)) : (void)1;
 	ft_bzero((void *)&sha256, sizeof(sha256));
 	g_ssl->info.size = 32;
-	g_ssl->info.swap_endian = 1;
+	g_ssl->info.swap_endian = 0;
 	if (!(g_ssl->info.fl & FL_S))
 	{
 		if (!(res = hash_file_content32(word, sha256_word, &sha256)))
@@ -188,9 +188,9 @@ bool			get_sha256_hash(const char *word)
 	}
 	else
 		res = sha256_word(word, &sha256);
-	if (/*ft_get_endianness() && */(i = -1))
-		while (++i < (g_ssl->info.size / 4))
-			res[i] = swap_int32(res[i]);
+	// if (/*ft_get_endianness() && */(i = -1))
+	// 	while (++i < (g_ssl->info.size / 4))
+	// 		res[i] = swap_int32(res[i]);
 	print_hash32("SHA256", res, word);
 	return (false);
 }

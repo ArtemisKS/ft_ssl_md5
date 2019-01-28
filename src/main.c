@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:22:09 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/14 22:43:16 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/28 22:43:28 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,18 +84,58 @@ static bool			det_chunk_size(const char *name)
 	return (true);
 }
 
+void				processOpensslInput()
+{
+	char	*algo;
+	int		i;
+	char	*data;
+	int		cnt;
+	bool	fl;
+
+	i = -1;
+	cnt = 0;
+	fl = false;
+	ft_putstr("OpenSSL> ");
+	while (!fl && get_next_line(STDIN_FILENO, &algo) > 0)
+	{
+		while (g_funcs[++i].alg_name)
+		{
+			if (ft_strequ(algo, g_funcs[i].alg_name)
+			&& (det_chunk_size(algo)) && (g_ssl->algfunc = g_funcs[i].algo)
+			&& (g_ssl->info.fl |= FL_S) && (g_ssl->info.fl |= FL_P) && ++cnt)
+			{
+				if (!read_stin(STDIN_FILENO, &data))
+					return ;
+				g_ssl->algfunc(data);
+				free(data);
+				fl = true;
+			}
+		}
+		if (!fl && (i = -1))
+			ft_printf("openssl:Error: '%s' is an invalid command.\n\nMessage"
+			" Digest commands:\nmd5\tsha256\tsha224\nsha512\tsha384\n\n"
+			"OpenSSL> ", algo);
+		free(algo);
+	}
+	ft_printf(cnt ? "OpenSSL> %%\n" : " %%\n");
+}
+
 int					main(int ac, char **av)
 {
 	int	i;
 
 	i = -1;
 	g_ssl = (t_ssl *)ft_memalloc(sizeof(t_ssl));
-	(ac == 1) ? (puterr(0, USAGE)) : (void)1; 
-	while (g_funcs[++i].alg_name)
+	if (ac == 1)
+		processOpensslInput();
+	else
+	{
+		while (g_funcs[++i].alg_name)
 		if (ft_strequ(av[1], g_funcs[i].alg_name)
 		&& (det_chunk_size(av[1]))
 		&& (g_ssl->algfunc = g_funcs[i].algo))
 			return (g_funcs[i].func(ac, av));
-	puterr(3, INVALID_OPTION, av[1]);
+		puterr(3, INVALID_OPTION, av[1]);
+	}
 	return (false);
 }
