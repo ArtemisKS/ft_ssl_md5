@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/14 17:27:18 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/14 23:33:16 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/30 00:14:56 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,6 @@ bool			get_sha224_hash(const char *word)
 	(!word) ? (puterr(2, USAGE)) : (void)1;
 	ft_bzero((void *)&sha224, sizeof(sha224));
 	g_ssl->info.size = 28;
-	g_ssl->info.swap_endian = 1;
 	if (!(g_ssl->info.fl & FL_S))
 	{
 		if (!(res = hash_file_content32(word, sha224_word, &sha224)))
@@ -188,9 +187,9 @@ bool			get_sha224_hash(const char *word)
 	}
 	else
 		res = sha224_word(word, &sha224);
-	if (/*ft_get_endianness() && */(i = -1))
-		while (++i < (g_ssl->info.size / 4))
-			res[i] = swap_int32(res[i]);
+	// if (/*ft_get_endianness() && */(i = -1))
+	// 	while (++i < (g_ssl->info.size / 4))
+	// 		res[i] = swap_int32(res[i]);
 	print_hash32("SHA224", res, word);
 	return (false);
 }

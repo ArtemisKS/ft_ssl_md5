@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/12 18:50:06 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/28 10:25:55 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/29 23:59:42 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,6 @@ bool			get_sha256_hash(const char *word)
 	(!word) ? (puterr(2, USAGE)) : (void)1;
 	ft_bzero((void *)&sha256, sizeof(sha256));
 	g_ssl->info.size = 32;
-	g_ssl->info.swap_endian = 0;
 	if (!(g_ssl->info.fl & FL_S))
 	{
 		if (!(res = hash_file_content32(word, sha256_word, &sha256)))

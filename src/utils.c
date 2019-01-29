@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:34:32 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/29 23:52:59 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/30 00:13:45 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static bool		print_dig32(uint32_t *digest)
 	while (++i < g_ssl->info.size / 4)
 	{
 		tmp = digest[i];
-		(g_ssl->info.swap_endian) ? tmp = swap_int32(tmp) : 1;
+		// (g_ssl->info.swap_endian) ? tmp = swap_int32(tmp) : 1;
 		ft_printf("%8.8x", tmp);
 	}
 	return (true);
@@ -119,6 +119,26 @@ uint64_t	*hash_file_content64(const char *word, t_hash64 func, t_sha512 *sha)
 	free(content);
 	return (res);
 }
+
+size_t			calc_bytenum(const char *str, int algo)
+{
+	size_t			len;
+
+	len = ft_strlen(str) + 9;
+	if (algo == 256)
+	{
+		while (len * 8 % 512 != 0)
+			len++;
+	}
+	else if (algo == 512)
+	{
+		len += 8;
+		while (len * 8 % 1024 != 0)
+			len++;
+	}
+	return (len);
+}
+
 
 int					append_pad_bits_sha512(int fsize, int slen, uint64_t *buf)
 {

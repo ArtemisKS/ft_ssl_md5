@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:42:47 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/29 23:16:29 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/30 00:06:21 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,6 @@ bool						get_sha224_hash(const char *word);
 bool						get_sha256_hash(const char *word);
 bool						get_sha512_hash(const char *word);
 bool						get_sha384_hash(const char *word);
+size_t						calc_bytenum(const char *str, int alg);
 
 #endif

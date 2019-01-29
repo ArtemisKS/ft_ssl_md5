@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/14 21:06:47 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/29 15:54:53 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/30 00:05:56 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,25 +149,6 @@ static void	exec_sha512_cycle(t_sha512 *sha512, unsigned char *word)
 	}
 }
 
-size_t			num_bytes(const char *str, int algo)
-{
-	size_t			len;
-
-	len = ft_strlen(str) + 9;
-	if (algo == 256)
-	{
-		while (len * 8 % 512 != 0)
-			len++;
-	}
-	else if (algo == 512)
-	{
-		len += 8;
-		while (len * 8 % 1024 != 0)
-			len++;
-	}
-	return (len);
-}
-
 uint64_t	*sha512_word(const char *word, t_sha512 *sha512)
 {
 	// static uint8_t	last_block[128];
@@ -185,7 +166,7 @@ uint64_t	*sha512_word(const char *word, t_sha512 *sha512)
 	sha512->buffers[H] = 0x5be0cd19137e2179;
 	len = (uint64_t)ft_strlen(word);
 	// sha512->numBlocks = 1 + ((inp_bitlen + 16 + g_chunk_sbyte) / g_chunk_sbit);
-	sha512->len_bytes = num_bytes(word, 512);
+	sha512->len_bytes = calc_bytenum(word, 512);
 	message = (unsigned char *)malloc(sha512->len_bytes);
 	ft_bzero(message, sha512->len_bytes);
 	// message = ft_memalloc((sha512->len_bytes) * sizeof(char));
