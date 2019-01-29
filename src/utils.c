@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:34:32 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/28 22:05:28 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/29 23:52:59 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static bool		print_dig32(uint32_t *digest)
 {
-	uint32_t	i;
+	int			i;
 	uint32_t	tmp;
 
 	i = -1;
@@ -27,17 +27,17 @@ static bool		print_dig32(uint32_t *digest)
 	return (true);
 }
 
+
 static bool		print_dig64(uint64_t *digest)
 {
-	uint32_t	i;
-	uint32_t	tmp;
+	int			i;
+	uint64_t	tmp;
 
 	i = -1;
 	while (++i < g_ssl->info.size / 4)
 	{
 		tmp = digest[i];
-		(g_ssl->info.swap_endian) ? tmp = swap_int64(tmp) : 1;
-		ft_printf("%8.8x", tmp);
+		ft_printf("%16.16lx", tmp);
 	}
 	return (true);
 }
@@ -45,8 +45,10 @@ static bool		print_dig64(uint64_t *digest)
 void		print_hash32(char const *halgo, uint32_t *digest, char const *word)
 {
 	// ft_printf("g_ssl->info.fl: %d\n", g_ssl->info.fl);
-	if (g_ssl->info.fl & FL_P)
-		ft_strequ("", word) ? 0 : ft_printf("%s", word) && print_dig32(digest);
+	if (g_ssl->info.fl & FL_P && g_ssl->info.fl & FL_DONE)
+		print_dig32(digest);
+	else if (g_ssl->info.fl & FL_P)
+		(ft_printf("%s", word) | 1) && print_dig32(digest);
 	else if (g_ssl->info.fl & FL_Q)
 		print_dig32(digest);
 	else if (g_ssl->info.fl & FL_R)
@@ -65,8 +67,10 @@ void		print_hash32(char const *halgo, uint32_t *digest, char const *word)
 void		print_hash64(char const *halgo, uint64_t *digest, char const *word)
 {
 	// ft_printf("g_ssl->info.fl: %d\n", g_ssl->info.fl);
-	if (g_ssl->info.fl & FL_P)
-		ft_strequ("", word) ? 0 : ft_printf("%s", word) && print_dig64(digest);
+	if (g_ssl->info.fl & FL_P && g_ssl->info.fl & FL_DONE)
+		print_dig64(digest);
+	else if (g_ssl->info.fl & FL_P)
+		(ft_printf("%s", word) | 1) && print_dig64(digest);
 	else if (g_ssl->info.fl & FL_Q)
 		print_dig64(digest);
 	else if (g_ssl->info.fl & FL_R)
@@ -252,8 +256,9 @@ bool				process(int ac, char **av)
 	char		*data;
 
 	i = parse_options(av) - 1;
+	g_ssl->info.p_flag_used = false;
 	if (i == ac - 1 && (ac == 2 || ((g_ssl->info.fl & FL_Q) /*&& !(g_ssl->info.fl & FL_DONE)*/))
-		/*&& (g_ssl->info.fl |= FL_DONE)*/ && (g_ssl->info.fl |= FL_Q))
+		/*&& (g_ssl->info.fl |= FL_DONE)*/ /*&& (g_ssl->info.fl |= FL_Q)*/)
 	{
 		read_stin(STDIN_FILENO, &data) && (g_ssl->info.fl |= FL_S);
 		!g_ssl->algfunc(data) && (g_ssl->info.fl &= ~FL_S);
@@ -271,11 +276,20 @@ bool				read_stin(int fd, char **line)
 	int			rd;
 	char		buf[BUF + 1];
 	char		*cpy;
+	bool		fl;
 
 	if (fd < 0)
 		return (false);
-	*line = ft_strnew(1);
-	while ((rd = read(fd, buf, BUF)))
+	fl = false;
+	// write(1, "wtf111\n", 7);
+	if (g_ssl->info.p_flag_used)
+	{
+		*line = ft_strdup("");
+		return (true);
+	}
+	else
+		*line = ft_strnew(1);
+	while ((rd = read(fd, buf, BUF)) && (fl = true))
 	{
 		if (rd == ((buf[rd] = 0) - 1))
 			return (false);
@@ -283,5 +297,9 @@ bool				read_stin(int fd, char **line)
 		free(*line);
 		*line = cpy;
 	}
+	// write(1, "wtf111\n", 7);
+	if (!fl && !rd)
+		ft_memcpy(*line, "", 1);
+	// ft_printf("our str: '%s'\n", *line);
 	return (true);
 }

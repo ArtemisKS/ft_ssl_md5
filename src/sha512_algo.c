@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/14 21:06:47 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/28 22:49:01 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/29 15:54:53 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,21 +208,6 @@ uint64_t	*sha512_word(const char *word, t_sha512 *sha512)
 	return (digest);
 }
 
-static bool		print_dig64(uint64_t *digest)
-{
-	int			i;
-	uint64_t	tmp;
-
-	i = -1;
-	while (++i < g_ssl->info.size / 4)
-	{
-		tmp = digest[i];
-		// (g_ssl->info.swap_endian) ? tmp = swap_int64(tmp) : 1;
-		ft_printf("%lx", tmp);
-	}
-	return (true);
-}
-
 static bool		print_dig32(uint32_t *digest)
 {
 	int			i;
@@ -247,7 +232,6 @@ bool			get_sha512_hash(const char *word)
 	(!word) ? (puterr(2, USAGE)) : (void)1;
 	ft_bzero((void *)&sha512, sizeof(t_sha512 *));
 	g_ssl->info.size = 32;
-	g_ssl->info.swap_endian = 1;
 	if (!(g_ssl->info.fl & FL_S))
 	{
 		if (!(res = hash_file_content64(word, sha512_word, &sha512)))
@@ -260,9 +244,9 @@ bool			get_sha512_hash(const char *word)
 	// 		res[i] = swap_int64(res[i]);
 	// ft_printh_sha512(&sha512);
 	// print_dig64(res);
-	print_dig64(res);
+	// print_dig64(res);
 	// ft_printf("%llx%lx%lx%lx%lx%lx%lx%lx", sha512.buffers[A], sha512.buffers[B], sha512.buffers[C],
 	// 			sha512.buffers[D], sha512.buffers[E], sha512.buffers[F], sha512.buffers[G], sha512.buffers[H]);	
-	// print_hash64("SHA512", res, word);
+	print_hash64("SHA512", res, word);
 	return (false);
 }

@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:22:09 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/28 22:43:28 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/29 23:51:14 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int						parse_options(char **av)
 				read_stin(STDIN_FILENO, &data) && (g_ssl->info.fl |= FL_P);
 				!g_ssl->algfunc(data) && (g_ssl->info.fl &= ~FL_S);
 				g_ssl->info.fl &= ~FL_P;
+				g_ssl->info.p_flag_used = true;
 				free(data);
 			}
 			else if (av[i][k] == 'q')
@@ -100,9 +101,9 @@ void				processOpensslInput()
 	{
 		while (g_funcs[++i].alg_name)
 		{
-			if (ft_strequ(algo, g_funcs[i].alg_name)
-			&& (det_chunk_size(algo)) && (g_ssl->algfunc = g_funcs[i].algo)
-			&& (g_ssl->info.fl |= FL_S) && (g_ssl->info.fl |= FL_P) && ++cnt)
+			if (ft_strequ(algo, g_funcs[i].alg_name) && (det_chunk_size(algo))
+			&& (g_ssl->algfunc = g_funcs[i].algo) && (g_ssl->info.fl |= FL_S)
+			&& (g_ssl->info.fl |= FL_DONE) && (g_ssl->info.fl |= FL_P) && ++cnt)
 			{
 				if (!read_stin(STDIN_FILENO, &data))
 					return ;
@@ -126,6 +127,7 @@ int					main(int ac, char **av)
 
 	i = -1;
 	g_ssl = (t_ssl *)ft_memalloc(sizeof(t_ssl));
+	// g_ssl->info.p_flag_used = false;
 	if (ac == 1)
 		processOpensslInput();
 	else

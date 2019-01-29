@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:42:47 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/28 20:55:32 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/29 23:16:29 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct				s_info
 	uint8_t					fl;
 	uint8_t					swap_endian;
 	uint32_t				size;
+	bool					p_flag_used;
 }							t_info;
 
 typedef struct				s_oper

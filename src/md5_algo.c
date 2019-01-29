@@ -6,10 +6,11 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:10:23 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/14 23:06:18 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/29 23:06:49 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "../includes/ft_ssl.h"
 
 #define A 					0
@@ -149,6 +150,7 @@ bool			get_md5_hash(const char *word)
 {
 	t_md5sha	md5;
 	uint32_t	*res;
+	static		int cnt = 0;
 
 	(!word) ? (puterr(2, USAGE)) : (void)1;
 	ft_bzero((void *)&md5, sizeof(md5));
@@ -165,6 +167,7 @@ bool			get_md5_hash(const char *word)
 	}
 	else if (!(res = md5_word(word, &md5)))
 		return (true);
+	// ft_printf("our hashed str: '%S', ft_strlen((char *)res):%d, cnt: %d\n", (wchar_t *)res, ft_strlen((char *)res), ++cnt);	
 	print_hash32("MD5", res, word);
 	return (false);
 }
