@@ -6,24 +6,12 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:10:23 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/29 23:06:49 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/30 15:18:43 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "../includes/ft_ssl.h"
-
-#define A 					0
-#define B 					1
-#define C 					2
-#define D 					3
-#define F(B, C, D) 			((B) & (C)) | (~(B) & (D))
-#define G(B, C, D) 			((B) & (D)) | ((C) & ~(D))
-#define H(B, C, D) 			(B) ^ (C) ^ (D)
-#define I(B, C, D) 			(C) ^ (B | ~(D))
-
-#define UINT32_BIT			(sizeof(uint32_t) * 8)
-#define ROTATE_LEFT(x, n)	(((x) << (n)) | ((x) >> (32-(n))))
+#include "../includes/md5.h"
 
 static const uint32_t g_val[64] = {
 	0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,

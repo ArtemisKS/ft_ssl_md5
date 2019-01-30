@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:22:09 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/29 23:51:14 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/30 14:56:19 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ int					main(int ac, char **av)
 
 	i = -1;
 	g_ssl = (t_ssl *)ft_memalloc(sizeof(t_ssl));
-	// g_ssl->info.p_flag_used = false;
 	if (ac == 1)
 		processOpensslInput();
 	else

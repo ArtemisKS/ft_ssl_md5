@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:34:32 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/30 00:13:45 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/30 15:18:38 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static bool		print_dig32(uint32_t *digest)
 	while (++i < g_ssl->info.size / 4)
 	{
 		tmp = digest[i];
-		// (g_ssl->info.swap_endian) ? tmp = swap_int32(tmp) : 1;
+		(g_ssl->info.swap_endian) ? tmp = swap_int32(tmp) : 1;
 		ft_printf("%8.8x", tmp);
 	}
 	return (true);
@@ -157,12 +157,12 @@ int					append_pad_bits_sha512(int fsize, int slen, uint64_t *buf)
 	for(uint i = 0; i < (numBlocks * 16) - 1; i++)
         buf[i] = swap_int64(buf[i]);
 	buf[((numBlocks * g_chunk_sbit - g_chunk_sbyte) / 64) + 1] = inp_bitlen;
-	ft_printf("g_chunk_sbyte: %d; paddedInput:\n", g_chunk_sbyte);
+	// ft_printf("g_chunk_sbyte: %d; paddedInput:\n", g_chunk_sbyte);
 	// buf[((numBlocks * g_chunk_sbit - g_chunk_sbyte) / 64) + 1] = inp_bitlen;
 	// ft_printf("g_chunk_sbyte: %d; paddedInput:\n", g_chunk_sbyte);
-	for (int k = 0; k < ((numBlocks * g_chunk_sbit - g_chunk_sbyte) / 32) + 2; k++)
-		ft_printf("%x", buf[k]);
-    ft_printf("\n");
+	// for (int k = 0; k < ((numBlocks * g_chunk_sbit - g_chunk_sbyte) / 32) + 2; k++)
+	// 	ft_printf("%x", buf[k]);
+    // ft_printf("\n");
 	return (numBlocks * g_chunk_sbyte);
 }
 
@@ -195,12 +195,12 @@ int					append_pad_bits_sha(int fsize, int slen, uint32_t *buf)
 	// for (int k = 0; k < ((numBlocks * 512 - 64) / 32) + 2; k++)
 	// 	ft_printf("%x", buf[k]);
     // ft_printf("\n");
-	ft_printf("g_chunk_sbyte: %d; paddedInput:\n", g_chunk_sbyte);
+	// ft_printf("g_chunk_sbyte: %d; paddedInput:\n", g_chunk_sbyte);
 	// buf[((numBlocks * g_chunk_sbit - g_chunk_sbyte) / 64) + 1] = inp_bitlen;
 	// ft_printf("g_chunk_sbyte: %d; paddedInput:\n", g_chunk_sbyte);
-	for (int k = 0; k < ((numBlocks * g_chunk_sbit - g_chunk_sbyte) / 32) + 2; k++)
-		ft_printf("%x", buf[k]);
-    ft_printf("\n");
+	// for (int k = 0; k < ((numBlocks * g_chunk_sbit - g_chunk_sbyte) / 32) + 2; k++)
+	// 	ft_printf("%x", buf[k]);
+    // ft_printf("\n");
 	return (numBlocks * g_chunk_sbyte);
 }
 
