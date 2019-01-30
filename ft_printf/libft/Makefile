@@ -6,7 +6,7 @@
 #    By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/04 12:03:18 by akupriia          #+#    #+#              #
-#    Updated: 2018/12/04 12:15:47 by akupriia         ###   ########.fr        #
+#    Updated: 2019/01/30 19:50:52 by akupriia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -92,7 +92,8 @@ SRC :=	ft_putchar.c \
 		ft_lstpush.c \
 		ft_atoi_base.c \
 		ft_strstr_start.c \
-		get_next_line.c
+		get_next_line.c \
+		ft_strchr_ind.c
 
 NAME :=		libft.a
 HFILES :=	libft.h

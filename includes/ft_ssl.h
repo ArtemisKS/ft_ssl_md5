@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:42:47 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/30 15:13:47 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/31 00:53:10 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ typedef bool				(*t_algo)(const char *);
 size_t						g_chunk_sbyte;
 size_t						g_chunk_sbit;
 
-enum FLAGS
+enum						e_flags
 {
-	FL_P = 		1,
-	FL_Q = 		2,
-	FL_R = 		4,
-	FL_S = 		8,
-	FL_DONE = 	16
+	FL_P = 1,
+	FL_Q = 2,
+	FL_R = 4,
+	FL_S = 8,
+	FL_DONE = 16
 };
 
 typedef struct				s_info
@@ -86,32 +86,44 @@ typedef struct				s_sha512
 	uint64_t				buffers[8];
 	uint64_t				len_bits;
 	uint64_t				len_bytes;
-	uint					numBlocks;
+	uint					num_blocks;
 }							t_sha512;
 
 typedef uint64_t*			(*t_hash64)(const char *, t_sha512 *);
-uint64_t					*hash_file_content64(const char *word, t_hash64 func, t_sha512 *sha);
+uint64_t					*hash_file_content64(const char *word,
+	t_hash64 func, t_sha512 *sha);
 
 typedef uint32_t*			(*t_hash32)(const char *, t_md5sha *);
-uint32_t					*hash_file_content32(const char *word, t_hash32 func, t_md5sha *shamd);
+uint32_t					*hash_file_content32(const char *word,
+	t_hash32 func, t_md5sha *shamd);
 
 void						puterr(int type, const char *strerr, ...);
 bool						read_stin(int fd, char **line);
 bool						process(int ac, char **av);
-int							parse_options(char **av);
+void						parse_options(char **av, int *i);
 bool						get_md5_hash(const char *word);
 uint32_t					swap_int32(const uint32_t value);
 uint64_t					swap_int64(const uint64_t value);
-int							append_pad_bits_sha(int fsize, int slen, uint32_t *buf);
-int							append_pad_bits_sha512(int fsize, int slen, uint64_t *buf);
-int							append_pad_bits_md5(int fsize, int slen, uint8_t *buf);
+int							append_pad_bits_sha(int fsize, int slen,
+	uint32_t *buf);
+int							append_pad_bits_sha512(int fsize, int slen,
+	uint64_t *buf);
+int							append_pad_bits_md5(int fsize, int slen,
+	uint8_t *buf);
 bool						get_sha256_hash(const char *word);
-void						print_hash32(char const *alg, uint32_t *digest, char const *word);
-void						print_hash64(char const *alg, uint64_t *digest, char const *word);
+void						print_hash32(char const *alg, uint32_t *digest,
+	char const *word);
+void						print_hash64(char const *alg, uint64_t *digest,
+	char const *word);
 bool						get_sha224_hash(const char *word);
 bool						get_sha256_hash(const char *word);
 bool						get_sha512_hash(const char *word);
 bool						get_sha384_hash(const char *word);
-size_t						calc_bytenum(const char *str, int alg);
+size_t						calc_bytenum(const char *str, size_t len, int alg);
+void						sha512_r_algo(uint64_t *buff, uint64_t *tmp_words);
+void						exec_sha512_cycle(t_sha512 *sha512,
+	unsigned char *word);
+void						sha256_r_algo(uint32_t *buff, uint32_t *tmp_words);
+void						exec_sha256_cycle(t_md5sha *sha256, uint32_t *word);
 
 #endif

@@ -1,26 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_wcharlen.c                                      :+:      :+:    :+:   */
+/*   ft_strchr_ind.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/21 00:03:43 by angavrel          #+#    #+#             */
-/*   Updated: 2019/01/30 23:54:53 by akupriia         ###   ########.fr       */
+/*   Created: 2019/01/30 19:48:41 by akupriia          #+#    #+#             */
+/*   Updated: 2019/01/30 19:51:07 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-size_t	ft_wcharlen(unsigned wc)
+int		ft_strchr_ind(char *s, int c)
 {
-	if (wc < 0x80)
-		return (1);
-	else if (wc < 0x800)
-		return (2);
-	else if (wc < 0x10000)
-		return (3);
-	else if (wc < 0xE0080)
-		return (4);
-	return (0);
+	int		i;
+
+	i = -1;
+	while (s[++i])
+		if (s[i] == c)
+			return (i);
+	return (-1);
 }

@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/06 18:29:58 by angavrel          #+#    #+#             */
-/*   Updated: 2018/12/04 12:12:38 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/30 19:49:14 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,5 +108,6 @@ int				ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t			ft_wcharlen(unsigned c);
 size_t			ft_wstrlen(unsigned *s);
 char			*ft_strdup(const char *s1);
+int				ft_strchr_ind(char *s, int c);
 
 #endif

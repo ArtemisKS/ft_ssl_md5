@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/30 15:01:11 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/30 15:12:14 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/31 00:48:13 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,6 @@ static uint32_t const	g_constants[64] = {
 	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
 
-
+void			init_tmp_words(uint32_t *w, uint32_t *block);
 
 #endif

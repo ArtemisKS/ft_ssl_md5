@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/30 20:15:12 by akupriia          #+#    #+#             */
-/*   Updated: 2018/12/19 20:59:41 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/30 19:53:32 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,5 +126,6 @@ void				ft_lstpush(t_list **alst, t_list *new);
 char				*ft_itoa_base_u(uintmax_t value, int base);
 size_t				ft_nbrlen_u(uintmax_t n);
 char				*ft_strstr_start(const char *str, const char *to_find);
+int					ft_strchr_ind(char *s, int c);
 
 #endif
