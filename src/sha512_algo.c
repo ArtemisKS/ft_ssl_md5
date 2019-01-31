@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/14 21:06:47 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 01:43:47 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/31 02:35:58 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void		init_tmp_words512(uint64_t *w, uint64_t *block)
 	}
 }
 
-void		exec_sha512_cycle(t_sha512 *sha512, uint64_t *word)
+void		exec_sha512_cycle(t_sha512 *sha512, unsigned char *word)
 {
 	int				chunk_num;
 	uint64_t		buffers[8];
@@ -77,7 +77,7 @@ void		exec_sha512_cycle(t_sha512 *sha512, uint64_t *word)
 
 uint64_t	*sha512_word(const char *word, t_sha512 *sha512)
 {
-	void			*message;
+	unsigned char	*message;
 	uint64_t		*digest;
 	uint64_t		len;
 
@@ -96,7 +96,7 @@ uint64_t	*sha512_word(const char *word, t_sha512 *sha512)
 	ft_memcpy(message, word, len);
 	sha512->len_bytes = append_pad_bits_sha512(0, len, (uint64_t *)message);
 	sha512->len_bits = sha512->len_bytes * CHAR_BIT;
-	exec_sha512_cycle(sha512, (uint64_t *)message);
+	exec_sha512_cycle(sha512, message);
 	free(message);
 	digest = ft_memalloc(sizeof(sha512->buffers));
 	ft_memcpy(digest, sha512->buffers, sizeof(sha512->buffers));

@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/14 21:21:38 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 01:43:45 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/31 02:35:56 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 uint64_t			*sha384_word(const char *word, t_sha512 *sha384)
 {
-	void			*message;
+	unsigned char	*message;
 	uint64_t		*digest;
 	uint64_t		len;
 
@@ -33,7 +33,7 @@ uint64_t			*sha384_word(const char *word, t_sha512 *sha384)
 	ft_memcpy(message, word, len);
 	sha384->len_bytes = append_pad_bits_sha512(0, len, (uint64_t *)message);
 	sha384->len_bits = sha384->len_bytes * CHAR_BIT;
-	exec_sha512_cycle(sha384, (uint64_t *)message);
+	exec_sha512_cycle(sha384, message);
 	free(message);
 	digest = ft_memalloc(sizeof(sha384->buffers));
 	ft_memcpy(digest, sha384->buffers, sizeof(sha384->buffers));

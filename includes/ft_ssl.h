@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:42:47 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 01:59:34 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/31 02:36:18 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define RED				"\033[0;31m"
 # define INVALID_OPTION		"ft_ssl: Error: '%s' is an invalid command:\n"
 # define PROGRAM			"usage: ft_ssl [md5 | sha[224 | 256 | 384 | 512]]"
-# define USAGE(s)			s " [-pqr] [-s string] [files ...]"
+# define USAGE				PROGRAM " [-pqr] [-s string] [files ...]"
 # define BUF				4096
 # define MD5_STEPS_N		64
 
@@ -122,7 +122,7 @@ bool						get_sha512_hash(const char *word);
 bool						get_sha384_hash(const char *word);
 size_t						calc_bytenum(const char *str, size_t len, int alg);
 void						sha512_r_algo(uint64_t *buff, uint64_t *tmp_words);
-void						exec_sha512_cycle(t_sha512 *sha512, uint64_t *w);
+void						exec_sha512_cycle(t_sha512 *sha512, unsigned char *w);
 void						sha256_r_algo(uint32_t *buff, uint32_t *tmp_words);
 void						exec_sha256_cycle(t_md5sha *sha256, uint32_t *word);
 
