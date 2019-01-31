@@ -17,6 +17,8 @@ My realization of ```MD5```, a widely used message-digest algorithm (in other wo
 
 ### Futhermore, ```openssl``` standard input feature is implemented
 
+---
+
 ## So, guys, I hope you will find this project useful and, in case any questions occur, feel free to connect with me by any of the emails listed below
    [Artemkupriyanets@yahoo.com](Artemkupriyanets@yahoo.com)  
    [mr.tyomka.97@gmail.com](mr.tyomka.97@gmail.com)  
