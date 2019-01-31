@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:10:23 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 00:54:12 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/31 01:41:19 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ uint32_t		*md5_word(const char *word, t_md5sha *md5)
 	md5->len_bytes = append_pad_bits_md5(0, len, message);
 	md5->len_bits = md5->len_bytes * CHAR_BIT;
 	exec_md5_cycle(md5, message);
+	free(message);
 	digest = ft_memalloc(sizeof(md5->buffers));
 	ft_memcpy(digest, md5->buffers, sizeof(md5->buffers));
 	return (digest);

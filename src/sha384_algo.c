@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/14 21:21:38 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 00:56:14 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/31 01:43:45 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 uint64_t			*sha384_word(const char *word, t_sha512 *sha384)
 {
-	unsigned char	*message;
+	void			*message;
 	uint64_t		*digest;
 	uint64_t		len;
 
@@ -28,12 +28,13 @@ uint64_t			*sha384_word(const char *word, t_sha512 *sha384)
 	sha384->buffers[H] = 0x47b5481dbefa4fa4;
 	len = ft_strlen(word);
 	sha384->len_bytes = calc_bytenum(word, (size_t)len, 512);
-	message = (unsigned char *)malloc(sha384->len_bytes);
+	message = ft_memalloc(sha384->len_bytes);
 	ft_bzero(message, sha384->len_bytes);
 	ft_memcpy(message, word, len);
 	sha384->len_bytes = append_pad_bits_sha512(0, len, (uint64_t *)message);
 	sha384->len_bits = sha384->len_bytes * CHAR_BIT;
-	exec_sha512_cycle(sha384, message);
+	exec_sha512_cycle(sha384, (uint64_t *)message);
+	free(message);
 	digest = ft_memalloc(sizeof(sha384->buffers));
 	ft_memcpy(digest, sha384->buffers, sizeof(sha384->buffers));
 	return (digest);

@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/30 19:00:00 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 00:31:56 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/31 01:52:20 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ uint64_t			*hash_file_content64(const char *file, t_hash64 func,
 	return (res);
 }
 
-inline void			puterr(int type, const char *strerr, ...)
+void				puterr(int type, const char *strerr, ...)
 {
 	va_list	ap;
 
@@ -56,8 +56,8 @@ inline void			puterr(int type, const char *strerr, ...)
 	if (!type)
 		ft_dprintf(2, "%s%s%s\n", RED, strerr, RESET);
 	else if (type == 1)
-		ft_dprintf(2, "%s%s%c\n%s\n%s", RED, "ft_ssl: illegal option -- ",
-		(char)va_arg(ap, int), strerr, RESET);
+		ft_dprintf(2, "%s%s%c\n%s%s\n", RED, "ft_ssl: illegal option -- ",
+		(char)va_arg(ap, int), RESET, strerr);
 	else if (type == 2)
 		ft_dprintf(2, "%s\n%s%s%s\n", "ft_ssl: md5: option requires an"
 		"argument -- s", RED, strerr, RESET);

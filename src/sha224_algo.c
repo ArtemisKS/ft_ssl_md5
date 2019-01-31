@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/14 17:27:18 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 00:49:44 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/01/31 01:41:46 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ uint32_t		*sha224_word(const char *word, t_md5sha *sha224)
 	sha224->len_bytes = append_pad_bits_sha(0, len, (uint32_t *)message);
 	sha224->len_bits = sha224->len_bytes * CHAR_BIT;
 	exec_sha256_cycle(sha224, (uint32_t *)message);
+	free(message);
 	digest = ft_memalloc(sizeof(sha224->buffers));
 	ft_memcpy(digest, sha224->buffers, sizeof(sha224->buffers));
 	return (digest);
