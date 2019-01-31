@@ -23,4 +23,5 @@ My realization of ```MD5```, a widely used message-digest algorithm (in other wo
    [Artemkupriyanets@yahoo.com](https://www.yahoo.com)  
    [mr.tyomka.97@gmail.com](https://www.gmail.com)  
 
-# Thanks for attention:EMOJICODE:
+# Thanks for attention, guys)
+:EMOJICODE:
