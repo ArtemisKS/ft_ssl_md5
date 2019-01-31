@@ -4,10 +4,10 @@ My realization of ```MD5```, a widely used message-digest algorithm (in other wo
 ---
 
 ### Besides ```MD5``` itself, next ```SHA2``` family hash functions are implemented:
-   *SHA256  
-   *SHA224  
-   *SHA512  
-   *SHA384  
+   -SHA256  
+   -SHA224  
+   -SHA512  
+   -SHA384  
 
 ---
 
@@ -23,4 +23,4 @@ My realization of ```MD5```, a widely used message-digest algorithm (in other wo
    [Artemkupriyanets@yahoo.com](https://www.yahoo.com)  
    [mr.tyomka.97@gmail.com](https://www.gmail.com)  
 
-# Thank you for attention!
+# Thanks for attention:EMOJICODE:
