@@ -3,7 +3,7 @@ My realization of ```MD5```, a widely used message-digest algorithm (in other wo
 
 ---
 
-### Besides ```MD5``` itself, next _SHA2_ family hash functions are implemented:
+### Besides ```MD5``` itself, next ```SHA2``` family hash functions are implemented:
    *SHA256  
    *SHA224  
    *SHA512  
