@@ -20,7 +20,7 @@ My realization of ```MD5```, a widely used message-digest algorithm (in other wo
 ---
 
 ## So, guys, I hope you will find this project useful and, in case any questions occur, feel free to connect with me by any of the emails listed below
-   [Artemkupriyanets@yahoo.com](Artemkupriyanets@yahoo.com)  
-   [mr.tyomka.97@gmail.com](mr.tyomka.97@gmail.com)  
+   [Artemkupriyanets@yahoo.com](yahoo.com)  
+   [mr.tyomka.97@gmail.com](gmail.com)  
 
 # Thank you for attention!
