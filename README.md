@@ -4,10 +4,10 @@ My realization of ```MD5```, a widely used message-digest algorithm (in other wo
 ---
 
 ### Besides ```MD5``` itself, next _SHA2_ family hash functions are implemented:
-...*SHA256..
-...*SHA224..
-...*SHA512..
-...*SHA384..
+   *SHA256  
+   *SHA224  
+   *SHA512  
+   *SHA384  
 
 ---
 
@@ -18,7 +18,7 @@ My realization of ```MD5```, a widely used message-digest algorithm (in other wo
 ### Futhermore, ```openssl``` standard input feature is implemented
 
 ## So, guys, I hope you will find this project useful and, in case any questions occur, feel free to connect with me by any of the emails listed below
-⋅⋅⋅[Artemkupriyanets@yahoo.com](Artemkupriyanets@yahoo.com)..
-⋅⋅⋅[mr.tyomka.97@gmail.com](mr.tyomka.97@gmail.com)..
+   [Artemkupriyanets@yahoo.com](Artemkupriyanets@yahoo.com)  
+   [mr.tyomka.97@gmail.com](mr.tyomka.97@gmail.com)  
 
 # Thank you for attention!
