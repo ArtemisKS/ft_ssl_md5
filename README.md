@@ -1,4 +1,4 @@
-# MD5
+# ft_ssl_md5
 My realization of ```MD5```, a widely used message-digest algorithm (in other words, a hash function).
 
 ---
