@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:42:47 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 02:36:18 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/02/01 23:48:45 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct				s_oper
 
 typedef struct				s_ssl
 {
+	uint					fsize;
 	t_info					info;
 	t_oper					oper;
 	t_algo					algfunc;
@@ -109,8 +110,7 @@ int							append_pad_bits_sha(int fsize, int slen,
 	uint32_t *buf);
 int							append_pad_bits_sha512(int fsize, int slen,
 	uint64_t *buf);
-int							append_pad_bits_md5(int fsize, int slen,
-	uint8_t *buf);
+int							append_pad_bits_md5(uint8_t *buf);
 bool						get_sha256_hash(const char *word);
 void						print_hash32(char const *alg, uint32_t *digest,
 	char const *word);

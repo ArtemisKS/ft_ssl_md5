@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/30 19:00:00 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 01:52:20 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/02/01 23:50:43 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,30 +90,37 @@ bool				process(int ac, char **av)
 	return (false);
 }
 
+static void		print_our_data(uint8_t *data)
+{
+	int i = -1;
+
+	while (++i < g_ssl->fsize)
+		ft_printf("%x\n", data[i]);
+	ft_printf("\n");
+}
+
 bool				read_stin(int fd, char **line)
 {
 	int			rd;
 	char		buf[BUF + 1];
 	char		*cpy;
-	bool		fl;
 
 	if (fd < 0)
 		return (false);
-	fl = false;
-	if (g_ssl->info.p_flag_used)
-		return (ft_strequ((*line = ft_strdup("")), ""));
-	else
-		*line = ft_strnew(1);
-	while ((rd = read(fd, buf, BUF)))
+	rd = 0;
+	*line = ft_memalloc(1);
+	while (!g_ssl->info.p_flag_used && (rd = read(fd, buf, BUF)) > 0)
 	{
-		!fl ? fl = true : 1;
-		if (rd == ((buf[rd] = 0) - 1))
-			return (false);
-		cpy = ft_strjoin(*line, buf);
+		cpy = malloc(rd);
+		ft_memcpy(cpy, *line, g_ssl->fsize);
+		ft_memcpy(cpy + g_ssl->fsize, buf, rd);
+		g_ssl->fsize += rd;
 		free(*line);
 		*line = cpy;
 	}
-	if (!fl && !rd)
-		ft_memcpy(*line, "", 1);
+	// if (rd == -1 && !(buf[rd] = 0))
+	// 	return (false);
+	// print_our_data((uint8_t *)*line);
+	(!g_ssl->fsize) && (**line = '\0');
 	return (true);
 }

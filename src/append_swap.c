@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/30 18:59:00 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 00:22:21 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/02/01 23:12:17 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,19 @@ int					append_pad_bits_sha(int fsize, int slen, uint32_t *buf)
 	return (num_blocks * g_chunk_sbyte);
 }
 
-int					append_pad_bits_md5(int fsize, int slen, uint8_t *buf)
+int					append_pad_bits_md5(uint8_t *buf)
 {
 	size_t		size;
 	uint32_t	inp_bitlen;
 
-	fsize += slen;
-	size = slen * CHAR_BIT;
+	size = g_ssl->fsize * CHAR_BIT;
 	while (++size % g_chunk_sbit != 448)
 		;
 	size /= CHAR_BIT;
-	buf[slen] = 0x80;
-	inp_bitlen = CHAR_BIT * slen;
+	buf[g_ssl->fsize] = 0x80;
+	inp_bitlen = g_ssl->fsize * CHAR_BIT;
 	ft_memcpy(buf + size, &inp_bitlen, 4);
-	return (size);
+	return (size + 8);
 }
 
 inline uint32_t		swap_int32(const uint32_t value)

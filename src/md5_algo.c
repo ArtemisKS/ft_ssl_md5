@@ -6,11 +6,10 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:10:23 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 01:41:19 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/02/01 23:48:06 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "../includes/md5.h"
 
 static void		md5_r_algo(uint32_t *bufs, uint32_t *chunk)
@@ -50,31 +49,50 @@ static void		exec_md5_cycle(t_md5sha *md5, uint8_t *word)
 	int			j;
 
 	i = -1;
-	chunk_num = md5->len_bits / g_chunk_sbit + 1;
+	chunk_num = md5->len_bits / g_chunk_sbit;
+	ft_printf("chunk_num: %d\n", chunk_num);
 	while (++i < chunk_num && (j = -1))
 	{
 		ft_memcpy(buffers, md5->buffers, sizeof(buffers));
-		md5_r_algo(buffers, (uint32_t*)(void*)(word + i * g_chunk_sbyte));
+		md5_r_algo(buffers, (uint32_t*)(word + i * g_chunk_sbyte));
 		while (++j < 4)
 			md5->buffers[j] += buffers[j];
 	}
+	j = -1;
+	// while (++j < 4)
+	// 	ft_printf("md5->buffers[%d]: %u\n",j, md5->buffers[j]);
+}
+
+static void		print_our_data(uint32_t *data)
+{
+	int i = -1;
+
+	while (++i < g_ssl->fsize / 4)
+		ft_printf("%x ", data[i]);
+	ft_printf("\n");	
 }
 
 uint32_t		*md5_word(const char *word, t_md5sha *md5)
 {
 	uint8_t			*message;
 	uint32_t		*digest;
-	int				len;
+	int				i;
 
-	len = ft_strlen(word);
-	message = ft_memalloc((len + g_chunk_sbyte) * sizeof(char));
-	ft_strcpy((char *)message, word);
-	md5->len_bytes = append_pad_bits_md5(0, len, message);
+	ft_printf("g_ssl->fsize: %d\n", g_ssl->fsize);
+	message = ft_memalloc((g_ssl->fsize + g_chunk_sbyte) * sizeof(char));
+	i = -1;
+	// while (++i < g_ssl->fsize)
+	// 	message[i] = word[i];
+	ft_memcpy(message, word, g_ssl->fsize);
+	// print_our_data((uint32_t *)word);
+	md5->len_bytes = append_pad_bits_md5(message);
+	ft_printf("md5->len_bytes: %d\n", md5->len_bytes);
 	md5->len_bits = md5->len_bytes * CHAR_BIT;
 	exec_md5_cycle(md5, message);
 	free(message);
-	digest = ft_memalloc(sizeof(md5->buffers));
-	ft_memcpy(digest, md5->buffers, sizeof(md5->buffers));
+	ft_printf("sizeof(buffers): %d\n", sizeof(md5->buffers));
+	digest = ft_memalloc(sizeof(md5->buffers) / 2);
+	ft_memcpy(digest, md5->buffers, sizeof(md5->buffers) / 2);
 	return (digest);
 }
 
@@ -99,5 +117,6 @@ bool			get_md5_hash(const char *word)
 	else if (!(res = md5_word(word, &md5)))
 		return (true);
 	print_hash32("MD5", res, word);
+	g_ssl->fsize = 0;
 	return (false);
 }
