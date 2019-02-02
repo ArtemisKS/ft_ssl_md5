@@ -9,6 +9,7 @@ My realization of ```MD5```, a widely used message-digest algorithm (in other wo
 ####   - SHA512  
 ####   - SHA384  
 
+#### (Sorry, guys, no ```Whirlpool```:disappointed:)
 ---
 
 ### Additionally, ```md5``` Linux terminal command is almost fully repeated (with flags -[pqrs]), with MD5 as well as SHA hash functions compliant to ```md5``` standard parsing behaviour
@@ -23,4 +24,4 @@ My realization of ```MD5```, a widely used message-digest algorithm (in other wo
    [Artemkupriyanets@yahoo.com](https://www.yahoo.com)  
    [mr.tyomka.97@gmail.com](https://www.gmail.com)  
 
-# Thanks for attention, guys:kissing_heart:
+# Thanks for attention:kissing_heart:
