@@ -11,7 +11,7 @@ My realization of ```MD5```, a widely used message-digest algorithm (in other wo
 
 ---
 
-###Additionally, ```md5``` Linux terminal command is almost fully repeated (with flags -[pqrs]), with MD5 as well as SHA hash functions compliant to ```md5``` standard parsing behaviour
+### Additionally, ```md5``` Linux terminal command is almost fully repeated (with flags -[pqrs]), with MD5 as well as SHA hash functions compliant to ```md5``` standard parsing behaviour
 
 ---
 
