@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/14 21:21:38 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 02:35:56 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/02/02 13:53:04 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 uint64_t			*sha384_word(const char *word, t_sha512 *sha384)
 {
-	unsigned char	*message;
+	uint8_t			*message;
 	uint64_t		*digest;
-	uint64_t		len;
 
 	sha384->buffers[A] = 0xcbbb9d5dc1059ed8;
 	sha384->buffers[B] = 0x629a292a367cd507;
@@ -26,12 +25,10 @@ uint64_t			*sha384_word(const char *word, t_sha512 *sha384)
 	sha384->buffers[F] = 0x8eb44a8768581511;
 	sha384->buffers[G] = 0xdb0c2e0d64f98fa7;
 	sha384->buffers[H] = 0x47b5481dbefa4fa4;
-	len = ft_strlen(word);
-	sha384->len_bytes = calc_bytenum(word, (size_t)len, 512);
+	sha384->len_bytes = calc_bytenum(word, (size_t)g_ssl->fsize, 512);
 	message = ft_memalloc(sha384->len_bytes);
 	ft_bzero(message, sha384->len_bytes);
-	ft_memcpy(message, word, len);
-	sha384->len_bytes = append_pad_bits_sha512(0, len, (uint64_t *)message);
+	sha384->len_bytes = append_pad_bits_sha512((uint64_t *)message);
 	sha384->len_bits = sha384->len_bytes * CHAR_BIT;
 	exec_sha512_cycle(sha384, message);
 	free(message);
@@ -57,5 +54,6 @@ bool				get_sha384_hash(const char *word)
 	else
 		res = sha384_word(word, &sha384);
 	print_hash64("SHA384", res, word);
+	g_ssl->fsize = 0;
 	return (false);
 }

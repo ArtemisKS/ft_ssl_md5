@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/14 21:06:47 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 02:35:58 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/02/02 13:53:39 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void		init_tmp_words512(uint64_t *w, uint64_t *block)
 	}
 }
 
-void		exec_sha512_cycle(t_sha512 *sha512, unsigned char *word)
+void		exec_sha512_cycle(t_sha512 *sha512, uint8_t *word)
 {
 	int				chunk_num;
 	uint64_t		buffers[8];
@@ -77,9 +77,8 @@ void		exec_sha512_cycle(t_sha512 *sha512, unsigned char *word)
 
 uint64_t	*sha512_word(const char *word, t_sha512 *sha512)
 {
-	unsigned char	*message;
+	uint8_t			*message;
 	uint64_t		*digest;
-	uint64_t		len;
 
 	sha512->buffers[A] = 0x6a09e667f3bcc908;
 	sha512->buffers[B] = 0xbb67ae8584caa73b;
@@ -89,12 +88,11 @@ uint64_t	*sha512_word(const char *word, t_sha512 *sha512)
 	sha512->buffers[F] = 0x9b05688c2b3e6c1f;
 	sha512->buffers[G] = 0x1f83d9abfb41bd6b;
 	sha512->buffers[H] = 0x5be0cd19137e2179;
-	len = ft_strlen(word);
-	sha512->len_bytes = calc_bytenum(word, (size_t)(len + 9), 512);
+	sha512->len_bytes = calc_bytenum(word, (size_t)(g_ssl->fsize + 9), 512);
 	message = ft_memalloc(sha512->len_bytes);
 	ft_bzero(message, sha512->len_bytes);
-	ft_memcpy(message, word, len);
-	sha512->len_bytes = append_pad_bits_sha512(0, len, (uint64_t *)message);
+	ft_memcpy(message, word, g_ssl->fsize);
+	sha512->len_bytes = append_pad_bits_sha512((uint64_t *)message);
 	sha512->len_bits = sha512->len_bytes * CHAR_BIT;
 	exec_sha512_cycle(sha512, message);
 	free(message);
@@ -120,5 +118,6 @@ bool		get_sha512_hash(const char *word)
 	else
 		res = sha512_word(word, &sha512);
 	print_hash64("SHA512", res, word);
+	g_ssl->fsize = 0;
 	return (false);
 }

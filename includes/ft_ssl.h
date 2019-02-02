@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:42:47 by akupriia          #+#    #+#             */
-/*   Updated: 2019/02/01 23:48:45 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/02/02 13:50:05 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 # define INVALID_OPTION		"ft_ssl: Error: '%s' is an invalid command:\n"
 # define PROGRAM			"usage: ft_ssl [md5 | sha[224 | 256 | 384 | 512]]"
 # define USAGE				PROGRAM " [-pqr] [-s string] [files ...]"
-# define BUF				4096
+# define BUF				65536
 # define MD5_STEPS_N		64
 
 typedef bool				(*t_funcs)(int, char **);
@@ -106,10 +106,8 @@ void						parse_options(char **av, int *i);
 bool						get_md5_hash(const char *word);
 uint32_t					swap_int32(const uint32_t value);
 uint64_t					swap_int64(const uint64_t value);
-int							append_pad_bits_sha(int fsize, int slen,
-	uint32_t *buf);
-int							append_pad_bits_sha512(int fsize, int slen,
-	uint64_t *buf);
+int							append_pad_bits_sha(uint32_t *buf);
+int							append_pad_bits_sha512(uint64_t *buf);
 int							append_pad_bits_md5(uint8_t *buf);
 bool						get_sha256_hash(const char *word);
 void						print_hash32(char const *alg, uint32_t *digest,
@@ -122,7 +120,7 @@ bool						get_sha512_hash(const char *word);
 bool						get_sha384_hash(const char *word);
 size_t						calc_bytenum(const char *str, size_t len, int alg);
 void						sha512_r_algo(uint64_t *buff, uint64_t *tmp_words);
-void						exec_sha512_cycle(t_sha512 *sha512, unsigned char *w);
+void						exec_sha512_cycle(t_sha512 *sha512, uint8_t *w);
 void						sha256_r_algo(uint32_t *buff, uint32_t *tmp_words);
 void						exec_sha256_cycle(t_md5sha *sha256, uint32_t *word);
 

@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:34:32 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 00:57:29 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/02/02 13:47:02 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,14 @@ void		print_hash64(char const *halgo, uint64_t *digest, char const *word)
 
 size_t		calc_bytenum(const char *str, size_t slen, int algo)
 {
-	if (algo == g_chunk_sbit / 2)
+	size_t		size;
+
+	size = 0;
+	if (algo == 256)
 		while (slen * CHAR_BIT % g_chunk_sbit)
 			slen++;
-	else if (algo == g_chunk_sbit / 2 && (slen += CHAR_BIT))
+	else if (algo == 512 && (slen += CHAR_BIT))
 		while (slen * CHAR_BIT % g_chunk_sbit)
 			slen++;
-	return (slen);
+	return (size ? size + 8 : slen);
 }

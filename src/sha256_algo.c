@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/12 18:50:06 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 01:44:46 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/02/02 13:53:11 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void			exec_sha256_cycle(t_md5sha *sha256, uint32_t *word)
 	int				j;
 
 	i = -1;
-	chunk_num = sha256->len_bits / g_chunk_sbit;
+	chunk_num = sha256->len_bytes / g_chunk_sbyte;
 	ft_bzero(tmp_words, 64 * sizeof(uint32_t));
 	while (++i < chunk_num && (j = -1))
 	{
@@ -76,9 +76,8 @@ void			exec_sha256_cycle(t_md5sha *sha256, uint32_t *word)
 
 uint32_t		*sha256_word(const char *word, t_md5sha *sha256)
 {
-	unsigned char	*message;
+	uint8_t			*message;
 	uint32_t		*digest;
-	size_t			len;
 
 	sha256->buffers[A] = 0x6a09e667;
 	sha256->buffers[B] = 0xbb67ae85;
@@ -88,12 +87,11 @@ uint32_t		*sha256_word(const char *word, t_md5sha *sha256)
 	sha256->buffers[F] = 0x9b05688c;
 	sha256->buffers[G] = 0x1f83d9ab;
 	sha256->buffers[H] = 0x5be0cd19;
-	len = (uint64_t)ft_strlen(word);
-	sha256->len_bytes = calc_bytenum(word, (size_t)(len + 9), 256);
-	message = (unsigned char *)ft_memalloc(sha256->len_bytes);
+	sha256->len_bytes = calc_bytenum(word, (size_t)(g_ssl->fsize + 9), 256);
+	message = ft_memalloc(sha256->len_bytes);
 	ft_bzero(message, sha256->len_bytes);
-	ft_memcpy(message, word, len);
-	sha256->len_bytes = append_pad_bits_sha(0, len, (uint32_t *)message);
+	ft_memcpy(message, word, g_ssl->fsize);
+	sha256->len_bytes = append_pad_bits_sha((uint32_t *)message);
 	sha256->len_bits = sha256->len_bytes * CHAR_BIT;
 	exec_sha256_cycle(sha256, (uint32_t *)message);
 	free(message);
@@ -109,7 +107,7 @@ bool			get_sha256_hash(const char *word)
 	int			i;
 
 	(!word) ? (puterr(2, USAGE)) : (void)1;
-	ft_bzero((void *)&sha256, sizeof(sha256));
+	ft_bzero((void *)&sha256, sizeof(t_md5sha *));
 	g_ssl->info.size = 32;
 	if (!(g_ssl->info.fl & FL_S))
 	{
@@ -119,5 +117,6 @@ bool			get_sha256_hash(const char *word)
 	else
 		res = sha256_word(word, &sha256);
 	print_hash32("SHA256", res, word);
+	g_ssl->fsize = 0;
 	return (false);
 }
