@@ -86,14 +86,11 @@ void		print_hash64(char const *halgo, uint64_t *digest, char const *word)
 
 size_t		calc_bytenum(const char *str, size_t slen, int algo)
 {
-	size_t		size;
-
-	size = 0;
 	if (algo == 256)
 		while (slen * CHAR_BIT % g_chunk_sbit)
 			slen++;
 	else if (algo == 512 && (slen += CHAR_BIT))
 		while (slen * CHAR_BIT % g_chunk_sbit)
 			slen++;
-	return (size ? size + 8 : slen);
+	return (slen);
 }
