@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:42:47 by akupriia          #+#    #+#             */
-/*   Updated: 2019/02/02 13:50:05 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/02/02 17:23:29 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <stdbool.h>
 # include <limits.h>
 # include <stdarg.h>
+# include <sys/stat.h>
 
 # define RESET				"\033[0m"
 # define B_CYAN				"\033[1;36m"
@@ -34,11 +35,12 @@
 # define INVALID_OPTION		"ft_ssl: Error: '%s' is an invalid command:\n"
 # define PROGRAM			"usage: ft_ssl [md5 | sha[224 | 256 | 384 | 512]]"
 # define USAGE				PROGRAM " [-pqr] [-s string] [files ...]"
-# define BUF				65536
+# define BUF				100000000
 # define MD5_STEPS_N		64
 
 typedef bool				(*t_funcs)(int, char **);
 typedef bool				(*t_algo)(const char *);
+typedef struct stat			t_stat;
 size_t						g_chunk_sbyte;
 size_t						g_chunk_sbit;
 
@@ -72,6 +74,7 @@ typedef struct				s_ssl
 	t_info					info;
 	t_oper					oper;
 	t_algo					algfunc;
+	bool					is_dir;
 }							t_ssl;
 
 t_ssl						*g_ssl;

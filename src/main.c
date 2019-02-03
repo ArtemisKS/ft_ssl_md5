@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:22:09 by akupriia          #+#    #+#             */
-/*   Updated: 2019/01/31 01:37:42 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/02/02 17:09:58 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #define PRINT_ERR(s)	ft_printf("openssl:Error: '%s' %s%s", s, I_CMD, V_CMD)
 #define ASS_FL_S		(g_ssl->info.fl |= FL_S)
 #define NASSFL_S		((g_ssl->info.fl &= ~FL_S) | 1)
+
 #define ALGFUNC(s)		(ASS_FL_S && !g_ssl->algfunc(s) && NASSFL_S)
 
 static t_oper			g_funcs[] =
@@ -34,7 +35,8 @@ static inline char		*find_sarg(char **av, int *i, int *k)
 	if (av[*i][++(*k)])
 		return (&av[*i][*k]);
 	*k = 0;
-	return (av[++(*i)]) ? (av[*i]) : (NULL);
+	(av[++(*i)]) ? g_ssl->fsize = ft_strlen(av[*i]) : 1;
+	return (av[*i]) ? (av[*i]) : (NULL);
 }
 
 void					parse_options(char **av, int *i)

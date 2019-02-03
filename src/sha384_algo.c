@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/14 21:21:38 by akupriia          #+#    #+#             */
-/*   Updated: 2019/02/02 13:53:04 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/02/02 19:19:51 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@ uint64_t			*sha384_word(const char *word, t_sha512 *sha384)
 	sha384->buffers[F] = 0x8eb44a8768581511;
 	sha384->buffers[G] = 0xdb0c2e0d64f98fa7;
 	sha384->buffers[H] = 0x47b5481dbefa4fa4;
-	sha384->len_bytes = calc_bytenum(word, (size_t)g_ssl->fsize, 512);
+	sha384->len_bytes = calc_bytenum(word, (size_t)g_ssl->fsize + 9, 512);
 	message = ft_memalloc(sha384->len_bytes);
 	ft_bzero(message, sha384->len_bytes);
+	ft_memcpy(message, word, g_ssl->fsize);
 	sha384->len_bytes = append_pad_bits_sha512((uint64_t *)message);
 	sha384->len_bits = sha384->len_bytes * CHAR_BIT;
 	exec_sha512_cycle(sha384, message);

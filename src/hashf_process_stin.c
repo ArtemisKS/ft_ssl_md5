@@ -6,7 +6,7 @@
 /*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/30 19:00:00 by akupriia          #+#    #+#             */
-/*   Updated: 2019/02/02 13:52:18 by akupriia         ###   ########.fr       */
+/*   Updated: 2019/02/02 20:13:38 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void				puterr(int type, const char *strerr, ...)
 		ft_dprintf(2, "%s\n%s%s%s\n", "ft_ssl: md5: option requires an"
 		"argument -- s", RED, strerr, RESET);
 	else
-		ft_dprintf(2, "%sft_ssl: Error: '%s' is an invalid command\n%s%s\n",
+		ft_dprintf(2, "%sft_ssl: Error: '%s' is an invalid command\n%s\n",
 		RED, va_arg(ap, char const *), RESET);
 	va_end(ap);
 	exit(true);
@@ -72,9 +72,12 @@ bool				process(int ac, char **av)
 {
 	int32_t		i;
 	char		*data;
+	t_stat		tstat;
+	int			lst;
 
 	i = 1;
 	parse_options(av, &i);
+	ft_bzero((void *)&tstat, sizeof(t_stat *));
 	g_ssl->info.p_flag_used = false;
 	if (i == ac - 1 && (ac == 2 || (g_ssl->info.fl & FL_Q))
 	&& (g_ssl->info.fl |= FL_DONE) && (g_ssl->info.fl |= FL_P))
@@ -85,30 +88,36 @@ bool				process(int ac, char **av)
 		free(data);
 	}
 	(g_ssl->info.fl & FL_S) ? g_ssl->info.fl &= ~FL_S : 1;
-	while (i < ac && av[++i])
-		g_ssl->algfunc(av[i]);
+	while (i < ac && av[++i] && ((lst = lstat(av[i], &tstat)) | 1))
+		if (!S_ISDIR(tstat.st_mode) || lst == -1)
+			g_ssl->algfunc(av[i]);
+		else
+			ft_printf("ft_ssl: %s: Is a directory\n", av[i]);
 	return (false);
 }
 
 bool				read_stin(int fd, char **line)
 {
 	int			rd;
-	char		buf[BUF + 1];
+	char		*buf;
 	char		*cpy;
 
 	if (fd < 0)
 		return (false);
 	rd = 0;
 	*line = ft_memalloc(1);
+	buf = malloc(BUF + 1);
 	while (!g_ssl->info.p_flag_used && (rd = read(fd, buf, BUF)) > 0)
 	{
-		cpy = malloc(g_ssl->fsize + rd);
+		cpy = malloc(g_ssl->fsize + rd + 1);
 		ft_memcpy(cpy, *line, g_ssl->fsize);
 		ft_memcpy(cpy + g_ssl->fsize, buf, rd);
+		cpy[g_ssl->fsize + rd] = '\0';
 		g_ssl->fsize += rd;
 		free(*line);
 		*line = cpy;
 	}
+	free(buf);
 	(!g_ssl->fsize) && (**line = '\0');
 	return (true);
 }
