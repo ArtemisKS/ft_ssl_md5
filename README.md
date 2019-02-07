@@ -13,7 +13,7 @@ To get the executable `ft_ssl`, simply run ```make```
 ## Usage
 
 ```
-"usage: ft_ssl [md5 | sha[224 | 256 | 384 | 512]] [-pqr] [-s string] [files ...]"
+usage: ft_ssl [md5 | sha[224 | 256 | 384 | 512]] [-pqr] [-s string] [files ...]
 ```
 
 Program's behaviour is totally identical to `md5`, only with additional hash functions, so
