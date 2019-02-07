@@ -4,6 +4,24 @@ My realization of ```MD5```, a widely used message-digest algorithm (in other wo
 
 ---
 
+## Installation
+
+To get the executable `ft_ssl`, simply run ```make```
+
+---
+
+## Usage
+
+```
+"usage: ft_ssl [md5 | sha[224 | 256 | 384 | 512]] [-pqr] [-s string] [files ...]"
+```
+
+Program has the same behaviour as `md5`, only with additional hash functions, so
+
+```man md5```
+
+---
+
 ## Algorithms
 
 Besides ```MD5``` itself, next ```SHA2``` family hash functions are implemented:
