@@ -18,7 +18,9 @@ To get the executable `ft_ssl`, simply run ```make```
 
 Program has the same behaviour as `md5`, only with additional hash functions, so
 
-```man md5```
+```
+man md5
+```
 
 ---
 
@@ -38,7 +40,7 @@ Besides ```MD5``` itself, next ```SHA2``` family hash functions are implemented:
 ## Features
 
 ```md5``` Linux terminal command is almost fully repeated (with flags -[pqrs]),  
-with MD5 as well as SHA hash functions compliant to ```md5``` standard parsing behaviour
+with all hash functions compliant to ```md5```command standard parsing behaviour
 
 Futhermore, ```openssl``` standard input is implemented
 
